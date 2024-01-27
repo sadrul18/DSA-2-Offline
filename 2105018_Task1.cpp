@@ -313,6 +313,19 @@ class redBlackTrees
         preorderTraversal(node->right);
     }
 
+    int sizeOfRb(Node* node)
+    {
+        static int count=0;
+        if(node==Tnil)
+        {
+            return count;
+        }
+
+        sizeOfRb(node->left);
+        count++;
+        sizeOfRb(node->right);
+    }
+
 public:
     redBlackTrees()
     {
@@ -454,6 +467,11 @@ public:
         cout<<endl;
     }
 
+    boolean clear()
+    {
+
+    }
+
     boolean isEmpty()
     {
         return root==Tnil;
@@ -461,7 +479,7 @@ public:
 
     int size()
     {
-
+        return sizeOfRb(root);
     }
 
     void iteration()
@@ -486,6 +504,33 @@ public:
             cout << value << " Not found" << endl;
         }
     }
+
+    void insert(int value,string key)
+    {
+        R.rb_insert(value,key);
+    }
+
+    int size()
+    {
+        return R.size();
+    }
+
+    boolean Empty()
+    {
+        return R.isEmpty();
+    }
+
+    void iteration()
+    {
+        R.iteration();
+    }
+
+    boolean find(int value)
+    {
+        return R.find(value)!=nullptr;
+    }
+
+
 };
 
 int main()
@@ -504,4 +549,8 @@ int main()
     rb.deleteNode(40);
     rb.printNode();
     rb.iteration();
+    if(!rb.isEmpty())
+    {
+        cout<<"Size of map is: "<<rb.size();
+    }
 }
