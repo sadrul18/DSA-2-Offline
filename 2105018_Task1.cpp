@@ -264,6 +264,31 @@ class redBlackTrees
         return temp;
     }
 
+    void inorderTraversal(Node* node)
+    {
+        if(node==Tnil)
+        {
+            return;
+        }
+
+        inorderTraversal(node->left);
+        if (node->value != 0)
+        {
+            cout<<node->value<<"=>";
+            if (node->color == R)
+            {
+                cout << dye::red(node->key);
+            }
+            else
+            {
+                cout << node->key;
+            }
+
+            cout<<endl;
+        }
+        inorderTraversal(node->right);
+    }
+
     void preorderTraversal(Node *&node)
     {
         if (node == Tnil)
@@ -426,6 +451,22 @@ public:
     void printNode()
     {
         preorderTraversal(root);
+        cout<<endl;
+    }
+
+    boolean isEmpty()
+    {
+        return root==Tnil;
+    }
+
+    int size()
+    {
+
+    }
+
+    void iteration()
+    {
+        inorderTraversal(root);
     }
 };
 
@@ -462,4 +503,5 @@ int main()
     rb.printNode();
     rb.deleteNode(40);
     rb.printNode();
+    rb.iteration();
 }
