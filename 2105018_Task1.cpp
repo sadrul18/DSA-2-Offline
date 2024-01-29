@@ -1,4 +1,5 @@
 #include <iostream>
+#include<fstream>
 #include "color.hpp"
 using namespace std;
 
@@ -325,20 +326,16 @@ class redBlackTrees
         delete node;
     }
 
-    int sizeOfRb(Node* node)
+    int sizeOfRb(Node* node,int &size)
     {
-        int count=0;
         if(node==Tnil)
         {
-            return count;
+            return size;
         }
 
-        sizeOfRb(node->left);
-        if(node!=Tnil || node !=nullptr)
-        {
-            count++;
-        }
-        sizeOfRb(node->right);
+        sizeOfRb(node->left,size);
+        size++;
+        sizeOfRb(node->right,size);
     }
 
 public:
@@ -475,6 +472,7 @@ public:
    void clear()
    {
       deleteAll(root);
+      root=Tnil;
    }
 
     void printNode()
@@ -490,7 +488,9 @@ public:
 
     int size()
     {
-        return sizeOfRb(root);
+        int size;
+        sizeOfRb(root,size);
+        return size;
     }
 
     void iteration()
@@ -562,63 +562,85 @@ public:
 
 int main()
 {
-
     mapM m;
-    if(!m.clear())
+    freopen("input.txt","r",stdin);
+    freopen("outputTest.txt","w",stdout);
+    int count=0;
+    while(!feof(stdin))
     {
-        cout<<"Clear unsuccessful"<<endl;
-    }
-    m.insert(10, "Thors");
-    m.insert(34, "Canute");
-    m.insert(43, "Olaf");
-    m.insert(15, "Einer");
-    m.insert(40, "Olmar");
-    m.insert(53, "Floki");
-    m.insert(90, "Thorfinn");
-    m.insert(12, "Snake");
-    m.insert(78, "Askeladd");
-    m.display();
-    m.deleteNode(40);
-    m.display();
-    m.iteration();
-    cout<<m.size()<<endl;
-    if(m.find(90))
-    {
-        cout<<"Found"<<endl;
-    }
+        count++;
+        string str;
+        cin>>str;
+        if(str=="I")
+        {
+            int value;
+            string  key;
+            cin>>value>>key;
+            m.insert(value,key);
+            m.display();
+        }
 
-    if(m.find(40))
-    {
-        cout<<"Found"<<endl;
-    }
-    else{
-        cout<<"Not found"<<endl;
-    }
+        else if(str=="F")
+        {
+            int value;
+            cin>>value;
+            if(m.find(value))
+            {
+                cout<<value<<" found"<<endl;
+            }
+            else
+            {
+                cout<<value<<" not found"<<endl;
+            }
+        }
 
-    if(!m.Empty())
-    {
-        cout<<"Isn't empty"<<endl;
+        else if(str=="E")
+        {
+            int value;
+            cin>>value;
+            if(m.deleteNode(value))
+            {
+                m.display();
+            }
+            else
+            {
+                cout<<value<<" not found"<<endl;
+            }
+        }
+
+        else if(str=="Em")
+        {
+            if(m.Empty())
+            {
+                cout<<"yes"<<endl;
+            }
+
+            else
+            {
+                cout<<"no"<<endl;
+            }
+        }
+
+        else if(str=="Clr")
+        {
+            if(m.clear())
+            {
+                cout<<"successful"<<endl;
+            }
+            else
+            {
+                cout<<"unsuccessful"<<endl;
+            }
+        }
+
+        else if(str=="Itr")
+        {
+            m.iteration();
+        }
+
+        else if(str=="S")
+        {
+            cout<<m.size()<<endl;
+        }
     }
-
-    if(m.clear())
-    {
-        cout<<"Clear successful"<<endl;
-    }
-
-    // else
-    // {
-    //     cout<<"Unsuccessful"<<endl;
-    // }
-
-    if(m.Empty())
-    {
-        cout<<"Is empty"<<endl;
-    }
-
-    else 
-    {
-        cout<<m.size()<<endl;
-    }
-
-    m.display();
 }
