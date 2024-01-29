@@ -274,14 +274,13 @@ class redBlackTrees
         inorderTraversal(node->left);
         if (node->value != 0)
         {
-            cout<<node->value<<"=>";
             if (node->color == R)
             {
-                cout << dye::red(node->key);
+                cout<<dye::red(node->value)<<"=>"<< dye::red(node->key);
             }
             else
             {
-                cout << node->key;
+                cout<<node->value<<"=>"<< node->key;
             }
 
             cout<<endl;
@@ -297,32 +296,48 @@ class redBlackTrees
         }
         if (node->value != 0)
         {
-            cout << "(" << node->value << " ";
             if (node->color == R)
             {
-                cout << dye::red(node->key) << ")"
-                     << " ";
+                cout<<dye::red(node->value)<<dye::red("_")<< dye::red(node->key);
             }
             else
             {
-                cout << node->key << ")"
-                     << " ";
+                cout<<node->value<<"_"<<node->key;
             }
+            if(node->left!=Tnil || node->right!=Tnil) cout<<"(";
         }
+
         preorderTraversal(node->left);
+        if(node->left!=Tnil || node->right!=Tnil && node->value!=0)cout<<",";
         preorderTraversal(node->right);
+        if(node->left!=Tnil || node->right!=Tnil && node->value!=0)cout<<")";
+    }
+
+     void deleteAll(Node* node)
+    {
+        if(node==Tnil)
+        {
+            return;
+        }
+
+        deleteAll(node->left);
+        deleteAll(node->right);
+        delete node;
     }
 
     int sizeOfRb(Node* node)
     {
-        static int count=0;
+        int count=0;
         if(node==Tnil)
         {
             return count;
         }
 
         sizeOfRb(node->left);
-        count++;
+        if(node!=Tnil || node !=nullptr)
+        {
+            count++;
+        }
         sizeOfRb(node->right);
     }
 
@@ -379,10 +394,9 @@ public:
         rb_insert_fix(node);
     }
 
-    void deleteNode(int value)
+    void deleteNode(Node* z)
     {
-        Node *z = find(value);
-        //cout<<endl;
+
         if (z != Tnil)
         {
             Node *y = z;
@@ -391,14 +405,12 @@ public:
             if (z->left == Tnil)
             {
                 x = z->right;
-                cout << z->right->value << endl;
                 transplant(z, z->right);
             }
 
             else if (z->right == Tnil)
             {
                 x = z->left;
-                cout << x->value << endl;
                 transplant(z, z->left);
             }
 
@@ -407,8 +419,6 @@ public:
                 y = inorderSuccessor(z->right);
                 originColor = y->color;
                 x = y->right;
-                cout << y->value << endl;
-                cout << x->value << endl;
                 if (y->parent == z)
                 {
 
@@ -454,22 +464,23 @@ public:
 
             else if (value == temp->value)
             {
+                return temp;
                 break;
             }
         }
 
-        return temp;
+        return nullptr;
     }
+
+   void clear()
+   {
+      deleteAll(root);
+   }
 
     void printNode()
     {
         preorderTraversal(root);
         cout<<endl;
-    }
-
-    boolean clear()
-    {
-
     }
 
     boolean isEmpty()
@@ -488,23 +499,22 @@ public:
     }
 };
 
-class map
+class mapM
 {
     redBlackTrees R;
 
 public:
-    void deleteNode(int value)
+    boolean deleteNode(int value)
     {
-        if (R.find(value) != nullptr)
+        Node* node=R.find(value);
+        if (node== nullptr)
         {
-            R.deleteNode(value);
+            return false;
         }
-        else
-        {
-            cout << value << " Not found" << endl;
-        }
-    }
 
+        R.deleteNode(node);
+        return true;
+    } 
     void insert(int value,string key)
     {
         R.rb_insert(value,key);
@@ -530,27 +540,85 @@ public:
         return R.find(value)!=nullptr;
     }
 
+    boolean clear()
+    {
+        if(R.isEmpty())
+        {
+            return false;
+        }
+
+        R.clear();
+        return true;
+    }
+
+
+    void display()
+    {
+        R.printNode();
+    }
+
 
 };
 
 int main()
 {
-    redBlackTrees rb;
-    rb.rb_insert(10, "Thors");
-    rb.rb_insert(34, "Canute");
-    rb.rb_insert(43, "Olaf");
-    rb.rb_insert(15, "Einer");
-    rb.rb_insert(40, "Olmar");
-    rb.rb_insert(53, "Floki");
-    rb.rb_insert(90, "Thorfinn");
-    rb.rb_insert(12, "Snake");
-    rb.rb_insert(78, "Askeladd");
-    rb.printNode();
-    rb.deleteNode(40);
-    rb.printNode();
-    rb.iteration();
-    if(!rb.isEmpty())
+
+    mapM m;
+    if(!m.clear())
     {
-        cout<<"Size of map is: "<<rb.size();
+        cout<<"Clear unsuccessful"<<endl;
     }
+    m.insert(10, "Thors");
+    m.insert(34, "Canute");
+    m.insert(43, "Olaf");
+    m.insert(15, "Einer");
+    m.insert(40, "Olmar");
+    m.insert(53, "Floki");
+    m.insert(90, "Thorfinn");
+    m.insert(12, "Snake");
+    m.insert(78, "Askeladd");
+    m.display();
+    m.deleteNode(40);
+    m.display();
+    m.iteration();
+    cout<<m.size()<<endl;
+    if(m.find(90))
+    {
+        cout<<"Found"<<endl;
+    }
+
+    if(m.find(40))
+    {
+        cout<<"Found"<<endl;
+    }
+    else{
+        cout<<"Not found"<<endl;
+    }
+
+    if(!m.Empty())
+    {
+        cout<<"Isn't empty"<<endl;
+    }
+
+    if(m.clear())
+    {
+        cout<<"Clear successful"<<endl;
+    }
+
+    // else
+    // {
+    //     cout<<"Unsuccessful"<<endl;
+    // }
+
+    if(m.Empty())
+    {
+        cout<<"Is empty"<<endl;
+    }
+
+    else 
+    {
+        cout<<m.size()<<endl;
+    }
+
+    m.display();
 }
